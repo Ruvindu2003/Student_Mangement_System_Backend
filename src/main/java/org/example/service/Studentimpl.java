@@ -9,44 +9,48 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
-
-public class Studentimpl implements StudentService{
+public class Studentimpl implements StudentService {
     final ModelMapper modelMapper;
     final Studentrepository studentrepository;
 
     @Override
     public List<Student> getAll() {
-        List<Student> studentList=new ArrayList<>();
-        List<Studententity>all=studentrepository.findAll();
-        all.forEach(Studententity->{
-            studentList.add(modelMapper.map(Studententity,Student.class));
-
+        List<Student> studentList = new ArrayList<>();
+        List<Studententity> all = studentrepository.findAll();
+        all.forEach(studentEntity -> {
+            studentList.add(modelMapper.map(studentEntity, Student.class));
         });
         return studentList;
     }
 
-     @Override
-        public String getVirion() {
+    @Override
+    public String getVirion() {
         return "1.0.0V";
     }
 
     @Override
     public void addStudent(Student student) {
-        studentrepository.save(modelMapper.map(student,Studententity.class));
-
+        studentrepository.save(modelMapper.map(student, Studententity.class));
     }
 
     @Override
     public Student searchByID(Integer id) {
-        return modelMapper.map(studentrepository.findById(id),Student.class);
+        Optional<Studententity> studentEntity = studentrepository.findById(id);
+        return studentEntity.map(entity -> modelMapper.map(entity, Student.class)).orElse(null);
     }
 
     @Override
     public void updateStudent(Student student) {
-        studentrepository.save(modelMapper.map(student,Studententity.class));
+        studentrepository.save(modelMapper.map(student, Studententity.class));
+    }
 
+    @Override
+    public void deleteStudent(Integer id) {
+        studentrepository.deleteById(id);
     }
 
     @Override

@@ -33,6 +33,11 @@ public class StudentServiceVerion2 implements StudentService{
     }
 
     @Override
+    public void deleteStudent(Integer id) {
+
+    }
+
+    @Override
     public void deleteStident(Integer id) {
 
     }
